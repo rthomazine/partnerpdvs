@@ -19,6 +19,9 @@
 *.tar.gz
 *.rar
 
+# Docker files
+mongodb/
+
 # Maven
 target/
 bin/
