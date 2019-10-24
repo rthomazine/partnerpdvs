@@ -1,8 +1,8 @@
 package com.github.rthomazine.partnerpdv;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.rthomazine.partnerpdv.persistence.PartnerPdv;
-import com.github.rthomazine.partnerpdv.persistence.PartnerPdvRepository;
+import com.github.rthomazine.partnerpdv.persistence.Pdv;
+import com.github.rthomazine.partnerpdv.persistence.PdvRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class PartnerPdvsApplicationTests {
 	@Autowired
 	private ObjectMapper mapper;
 	@Autowired
-	private PartnerPdvRepository partnerRepository;
+	private PdvRepository partnerRepository;
 
 	private static String partnerPdvJson = "{" +
 			"  \"id\": 1, " +
@@ -44,7 +44,7 @@ public class PartnerPdvsApplicationTests {
 
 	@Test
 	public void testPartnerPdvJsonMapper() throws IOException {
-		PartnerPdv partnerPdv = mapper.readValue(partnerPdvJson, PartnerPdv.class);
+		Pdv partnerPdv = mapper.readValue(partnerPdvJson, Pdv.class);
 		assertNotNull(partnerPdv);
 		assertNotNull(partnerPdv.getAddress());
 		assertNotNull(partnerPdv.getCoverageArea());
@@ -52,23 +52,23 @@ public class PartnerPdvsApplicationTests {
 
 	@Test
 	public void testAddNewPartnerFromJsonToRepository() throws IOException {
-		PartnerPdv partnerPdv = mapper.readValue(partnerPdvJson, PartnerPdv.class);
+		Pdv partnerPdv = mapper.readValue(partnerPdvJson, Pdv.class);
 		partnerPdv = partnerRepository.save(partnerPdv);
-		assertTrue(partnerPdv.getId() != null);
+		assertNotNull(partnerPdv.getId());
 	}
 
 	@Test(expected = DuplicateKeyException.class)
 	public void testAddExistingPartnerToRepository() {
-		PartnerPdv partner = partnerRepository.save(PartnerPdv.builder()
-				.document("1432132123891/0001")
-				.owner("João Manuel")
-				.trading("Butequinho da Esquina")
-				.build());
+//		Pdv partner = partnerRepository.save(Pdv.builder()
+//				.document("1432132123891/0001")
+//				.owner("João Manuel")
+//				.trading("Butequinho da Esquina")
+//				.build());
 	}
 
 	@Test
 	public void testQueryExistingPartnerByDocument() {
-		Optional<PartnerPdv> partner = partnerRepository.findByDocument("1432132123891/0001");
+		Optional<Pdv> partner = partnerRepository.findByDocument("1432132123891/0001");
 		assertTrue(partner.isPresent());
 		assertTrue(partner.get().getOwner().equals("Zé da Silva"));
 		assertTrue(partner.get().getTrading().equals("Adega da Cerveja - Pinheiros"));
@@ -76,7 +76,7 @@ public class PartnerPdvsApplicationTests {
 
 	@Test
 	public void testQueryNonExistingPartnerByDocument() {
-		Optional<PartnerPdv> partner = partnerRepository.findByDocument("1432132123891/1111");
+		Optional<Pdv> partner = partnerRepository.findByDocument("1432132123891/1111");
 		assertFalse(partner.isPresent());
 	}
 
