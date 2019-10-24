@@ -17,6 +17,10 @@
         <java.version>12</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <springfox.swagger.version>2.9.2</springfox.swagger.version>
+        <googlecode.json-simple.version>1.1.1</googlecode.json-simple.version>
+        <sf-geojson.version>2.0.2</sf-geojson.version>
+        <caelum.stella-core.version>2.1.3</caelum.stella-core.version>
+        <modelmapper.version>2.3.2</modelmapper.version>
     </properties>
 
     <dependencies>
@@ -53,9 +57,24 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
+        <dependency>
             <groupId>mil.nga.sf</groupId>
             <artifactId>sf-geojson</artifactId>
-            <version>2.0.2</version>
+            <version>${sf-geojson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>${googlecode.json-simple.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.com.caelum.stella</groupId>
+            <artifactId>caelum-stella-core</artifactId>
+            <version>${caelum.stella-core.version}</version>
         </dependency>
 
         <!-- TESTING -->
