@@ -21,6 +21,16 @@ public class PartnerPdvExceptionHandler {
                 .build();
     }
 
+    @ExceptionHandler(DocumentException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorResponse handleException(DocumentException e) {
+        return ErrorResponse.builder()
+                .errorCode("INVALID_DOCUMENT")
+                .message(e.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ResponseBody
