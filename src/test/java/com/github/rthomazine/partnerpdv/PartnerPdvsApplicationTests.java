@@ -59,19 +59,18 @@ public class PartnerPdvsApplicationTests {
 
 	@Test(expected = DuplicateKeyException.class)
 	public void testAddExistingPartnerToRepository() {
-//		Pdv partner = partnerRepository.save(Pdv.builder()
-//				.document("1432132123891/0001")
-//				.owner("João Manuel")
-//				.trading("Butequinho da Esquina")
-//				.build());
+		partnerRepository.save(new Pdv()
+				.setDocument("1432132123891/0001")
+				.setOwner("João Manuel")
+				.setTrading("Butequinho da Esquina"));
 	}
 
 	@Test
 	public void testQueryExistingPartnerByDocument() {
-		Optional<Pdv> partner = partnerRepository.findByDocument("1432132123891/0001");
+		Optional<Pdv> partner = partnerRepository.findByDocument("22512343000178");
 		assertTrue(partner.isPresent());
-		assertTrue(partner.get().getOwner().equals("Zé da Silva"));
-		assertTrue(partner.get().getTrading().equals("Adega da Cerveja - Pinheiros"));
+		assertTrue(partner.get().getOwner().equals("Ze da Ambev"));
+		assertTrue(partner.get().getTrading().equals("Emporio legal"));
 	}
 
 	@Test
