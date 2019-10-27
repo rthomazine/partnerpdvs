@@ -1,5 +1,6 @@
 package com.github.rthomazine.partnerpdv.api.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -16,7 +17,9 @@ public class PartnerPdv {
 
     private String id;
     private String document;
+    @JsonAlias("ownerName")
     private String owner;
+    @JsonAlias("tradingName")
     private String trading;
     @JsonSerialize(using = GeoJsonMultiPolygonSerializer.class)
     private GeoJsonMultiPolygon coverageArea;
