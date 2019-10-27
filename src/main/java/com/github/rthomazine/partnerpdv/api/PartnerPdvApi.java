@@ -6,7 +6,7 @@ import com.github.rthomazine.partnerpdv.api.model.PartnerPdv;
 import com.github.rthomazine.partnerpdv.api.model.PartnersPdvs;
 import com.github.rthomazine.partnerpdv.service.PartnersPdvsService;
 import io.swagger.annotations.Api;
-import mil.nga.sf.geojson.Position;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -21,30 +21,32 @@ public class PartnerPdvApi {
     @Autowired
     private PartnersPdvsService partnersPdvsService;
 
-    @PostMapping(path = "/partners", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ApiOperation(value = "Retrieve all partners from database")
+    @PostMapping(path = "/partners", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public PartnerPdv createPartnerPdv(@RequestBody PartnerPdv partnerPdv) throws DocumentException, DuplicateKeyException {
         return partnersPdvsService.createPartnerPdv(partnerPdv);
     }
 
-    @GetMapping(path = "/partners", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ApiOperation(value = "Create and save a new partner on database")
+    @GetMapping(path = "/partners", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(code = HttpStatus.OK)
     public PartnersPdvs getAllPartnersPdvs() {
         return partnersPdvsService.getAllPdvs();
     }
 
-    @GetMapping(path = "/partners/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ApiOperation(value = "Retrieve a partner from database given its id")
+    @GetMapping(path = "/partners/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(code = HttpStatus.OK)
     public PartnerPdv getPartnerPdvById(@PathVariable String id) throws NotFoundException {
         return partnersPdvsService.getPdvById(id);
     }
 
-    @GetMapping(path = "/partners/search", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ApiOperation(value = "Search the nearest partner within coverage area given a location")
+    @GetMapping(path = "/partners/search", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(code = HttpStatus.OK)
-    public PartnerPdv searchPartnerPdvByLocation(@RequestBody Position location) throws NotFoundException {
-        //TODO
-
-        return null;
+    public PartnerPdv searchPartnerPdvByLocation(@RequestParam double longitude, @RequestParam double latitude) throws NotFoundException {
+        return partnersPdvsService.searchNearestPartner(longitude, latitude);
     }
 
 }

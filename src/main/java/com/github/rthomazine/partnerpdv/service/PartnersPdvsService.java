@@ -7,6 +7,7 @@ import com.github.rthomazine.partnerpdv.api.exception.NotFoundException;
 import com.github.rthomazine.partnerpdv.api.model.PartnerPdv;
 import com.github.rthomazine.partnerpdv.api.model.PartnersPdvs;
 import com.github.rthomazine.partnerpdv.persistence.Pdv;
+import com.github.rthomazine.partnerpdv.persistence.PdvCustomQueriesRepository;
 import com.github.rthomazine.partnerpdv.persistence.PdvRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class PartnersPdvsService {
     private ModelMapper modelMapper;
     @Autowired
     private PdvRepository pdvRepository;
+    @Autowired
+    private PdvCustomQueriesRepository pdvCustomQueriesRepository;
 
     private static CNPJValidator cnpjValidator = new CNPJValidator();
 
@@ -33,9 +36,11 @@ public class PartnersPdvsService {
         } catch (InvalidStateException e) {
             throw new DocumentException(e.getMessage());
         }
-        Pdv pdv = pdvRepository.save(modelMapper.map(partnerPdv, Pdv.class));
-        partnerPdv.setId(pdv.getId());
 
+        Pdv pdv = modelMapper.map(partnerPdv, Pdv.class);
+        pdv = pdvRepository.save(pdv);
+
+        partnerPdv.setId(pdv.getId());
         return partnerPdv;
     }
 
@@ -51,6 +56,13 @@ public class PartnersPdvsService {
         if (pdv.isEmpty())
             throw new NotFoundException(String.format("No partner pdv found with id %s", id));
         return modelMapper.map(pdv.get(), PartnerPdv.class);
+    }
+
+    public PartnerPdv searchNearestPartner(double longitude, double latitude) throws NotFoundException {
+        Optional<Pdv> pdv = pdvCustomQueriesRepository.queryNearestPartnerWithinCoverageArea(longitude, latitude);
+        return modelMapper.map(
+                pdv.orElseThrow(() -> new NotFoundException(String.format("There is no partner that has coverage area for the given location: lng=%d lat=%d", longitude, latitude))),
+                PartnerPdv.class);
     }
 
 }
