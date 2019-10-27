@@ -38,7 +38,7 @@ docker build -t partnerspdvs .
 ```
 Run it as a docker container
 ```
-docker run --name pycloud-network --rm pycloud-network:latest
+docker run --name partnerspdvs --rm partnerspdvs:latest
 ```
 Discover the IP address to open on web browser
 ```
